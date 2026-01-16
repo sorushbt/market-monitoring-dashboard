@@ -1,43 +1,39 @@
 import streamlit as st
-import yfinance as yf
-import pandas as pd
+from datetime import datetime, timedelta
+from data_loader import load_market_data
 
-st.title("📈 Market Monitoring Dashboard")
+# Page config
+st.set_page_config(page_title="Market Monitoring Dashboard", layout="wide")
 
-ticker = st.text_input("Ticker (Yahoo format)", "SAP.DE")
+st.title("Market Monitoring Dashboard")
+st.caption("API-based market data ingestion and benchmark comparison")
 
-# Marktdaten laden (yfinance)
-@st.cache_data
-def load_data(ticker):
-    return yf.download(ticker, period="6mo")
+# Sidebar - Configuration
+st.sidebar.header("Market Configuration")
 
-data = load_data(ticker)
+asset_ticker = st.sidebar.text_input("Asset ticker (Yahoo format)", "RHM.DE")
 
-def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
-    if isinstance(df.columns, pd.MultiIndex):
-        df.columns = df.columns.get_level_values(0)
-        return df
+benchmark_ticker = st.sidebar.text_input("Benchmark ticker", value = "^GDAXI")
 
-data = normalize_columns(data)
+start_date = st.sidebar.date_input("Start date", value = datetime.today() - timedelta(days=365))
 
-st.write("Preview of market data")
-st.dataframe(data.head())
+end_date = st.sidebar.date_input("End date", value = datetime.today())
 
-# Returns- & Volatilitätsanalyse
-data["Daily Return %"] = data["Close"].pct_change() * 100
-data["Rolling Volatility %"] = data["Daily Return %"].rolling(5).std()
+# Data loading
+with st.spinner("Loading market data..."):
+    asset_data = load_market_data(asset_ticker, start_date, end_date)
+    benchmark_data = load_market_data(benchmark_ticker, start_date, end_date)
 
-st.subheader("Market Metrics")
-st.write(data[["Close", "Daily Return %", "Rolling Volatility %"]].tail())
+# Sanity checks
+st.subheader("Data Overview")
 
-# Visualisierung mit Plotly
-import plotly.express as px
+col1, col2 = st.columns(2)
 
-fig = px.line(
-        data,
-        x = data.index,
-        y = "Close",
-        title = "Closing Price"
-            )
+with col1:
+    st.write(f"**{asset_ticker}**")
+    st.write(asset_data.tail())
 
-st.plotly_chart(fig, use_container_width=True)
+with col2:
+    st.write(f"**{benchmark_ticker}**")
+    st.write(benchmark_data.tail())
+
