@@ -13,6 +13,13 @@ def load_data(ticker):
 
 data = load_data(ticker)
 
+def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    if isinstance(df.columns, pd.MultiIndex):
+        df.columns = df.columns.get_level_values(0)
+        return df
+
+data = normalize_columns(data)
+
 st.write("Preview of market data")
 st.dataframe(data.head())
 
