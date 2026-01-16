@@ -22,3 +22,13 @@ def calculate_outperformance(
     aligned.columns = ["asset", "benchmark"]
 
     return aligned["asset"] - aligned["benchmark"]
+
+def calculate_rolling_volatility(returns: pd.Series, window: int = 30) -> pd.Series:
+    return returns.rolling(window = window).std() * (252 ** 0.5)
+
+def calculate_max_drawdown(cum_perf: pd.Series) -> float:
+    roll_max = cum_perf.cummax()
+    drawdown = (cum_perf - roll_max)
+    max_dd = drawdown.min()
+
+    return max_dd
