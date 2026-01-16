@@ -1,38 +1,27 @@
-# 📈 Market Monitoring Dashboard (Streamlit)
+# Market Monitoring Dashboard
 
-## Overview
-This project is an interactive **Market Monitoring Dashboard** developed with **Python and Streamlit**.  
-It simulates core activities of **cash market operations**, such as market data monitoring, volatility analysis, data quality checks and the detection of unusual market behavior.
+A professional trading-desk style dashboard for monitoring asset and benchmark performance, including risk metrics.
 
-The dashboard focuses on **Xetra-listed equities** and demonstrates how digitalized processes can support operational stability in dynamic and volatile market environments.
+## Features
 
----
+- API-based data ingestion from Yahoo Finance
+- Cumulative performance vs benchmark
+- Daily outperformance calculation
+- Rolling 30-day volatility & Max Drawdown
+- KPI indicators for quick overview
+- Interactive Plotly charts in dark theme
+- Sidebar for configurable tickers, date range and refresh
 
-## Key Features
-- 📊 **Market Data Monitoring**
-  - Daily price development
-  - Trading volume analysis
-- ⚠️ **Volatility Surveillance**
-  - Daily returns calculation
-  - Rolling volatility detection
-  - Alert mechanism for unusual market behavior
-- 🔍 **Data Quality Assurance**
-  - Automatic handling of inconsistent data structures
-  - Missing value detection
-- 🖥 **Interactive Dashboard**
-  - User-defined ticker selection
-  - Clean and intuitive visualization
-- 📁 **Data Export**
-  - Download processed market data as CSV
+## Installation
 
----
+1. Clone the repository:
+```bash
+git clone https://github.com/sorushbt/market-monitoring-dashboard.git
+```
+2. Create a virtual environment and install dependencies:
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
 
-## Tech Stack
-- **Python**
-- **Streamlit** (interactive dashboards)
-- **pandas / numpy** (data processing & analysis)
-- **yfinance** (market data retrieval)
-- **plotly** (visualization)
-- **Git & GitHub** (version control)
-
----
+3. Run the dashboard:
+   streamlit run app.py
